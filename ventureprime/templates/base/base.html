@@ -1,0 +1,37 @@
+<html>
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<link rel="shortcut icon" href="\static\favicon.ico">
+	<link rel="stylesheet" href="\static\bootstrap\css\bootstrap.css">
+</head>
+<body>
+<header>
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<a class="brand" href="#">VenturePrime</a>
+		<ul class="nav pull-right">
+      		<li></li>
+      		<li class="divider-vertical"></li>
+      		<li><a href="#">How It Works</a></li>
+      		<li class="divider-vertical"></li>
+      		<li><a href="#">Blog</a></li>
+      		<li class="divider-vertical"></li>
+      		<li><a href="#">Sign Up</a></li>
+    	</ul>
+		</div>
+	</div>
+</header>
+<br />
+<br />
+<p>
+<h1>Quality user feedback for your Venture</h1>
+</p>
+<p>
+
+{% block content %}{% endblock %}
+
+
+</p>
+</body>
+
+</html>

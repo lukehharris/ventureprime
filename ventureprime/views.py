@@ -1,13 +1,11 @@
-from django.template.loader import get_template
-from django.template import Context
+from django.shortcuts import render_to_response
 from django.http import HttpResponse
 import datetime
 
 def homepage(request):
-	return HttpResponse("Welcome to VenturePrime")
+    current_date = datetime.datetime.now()
+    return render_to_response('homepage/index.html', locals())
 
 def current_datetime(request):
-    now = datetime.datetime.now()
-    t = get_template('current_datetime.html')
-    html = t.render(Context({'current_date': now}))
-    return HttpResponse(html)
+    current_date = datetime.datetime.now()
+    return render_to_response('tests/current_datetime.html', locals())
