@@ -8,7 +8,7 @@
 <header>
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<a class="brand" href="#">VenturePrime</a>
+			<a class="brand" href="../">VenturePrime</a>
 		<ul class="nav pull-right">
       		<li></li>
       		<li class="divider-vertical"></li>
@@ -23,15 +23,24 @@
 </header>
 <br />
 <br />
-<p>
-<h1>Quality user feedback for your Venture</h1>
-</p>
-<p>
+<div class="content">
+	{% block content %}{% endblock %}
+</div>
 
-{% block content %}{% endblock %}
-
-
-</p>
+{% block footer %}
+<div class="navbar navbar-fixed-bottom">
+	<div class="navbar-inner">
+		<ul class="nav pull-left">
+   			<li></li>
+   			<li><a href="/contact/">Contact Us</a></li>
+   			<!--
+   			<li class="divider-vertical"></li>
+   			<li><a href="#">Fake Link</a></li>
+   			-->
+   		</ul>
+	</div>
+</div>
+{% endblock %}
+</div>
 </body>
-
 </html>

@@ -17,5 +17,12 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     (r'^$', homepage),
+    (r'^email_submit/$', email_submit),
+
     (r'^time/$', current_datetime),
+    (r'^meta/$', display_meta),
+    (r'^search/$', search),
+
+    (r'^comic/$', comic),
+    (r'^contact/$', contact),
 )
