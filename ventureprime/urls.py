@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     (r'^$', homepage),
+    (r'^confirm_email/$', confirm_email),
     (r'^email_submit/$', email_submit),
 
     (r'^time/$', current_datetime),

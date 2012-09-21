@@ -3,20 +3,19 @@
 {% block title %}Contact Us | VenturePrime{% endblock %}
 
 {% block content %}
-<h1>Contact Us - (Note: This page doesn't work yet)</h1>
+    <h1>Contact us</h1>
 
-    {% if errors %}
-        <ul>
-            {% for error in errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
     {% endif %}
 
-    <form action="/contact/" method="post">
-        <p>Subject: <input type="text" name="subject"></p>
-        <p>Your e-mail (optional): <input type="text" name="email"></p>
-        <p>Message: <textarea name="message" rows="10" cols="100"></textarea></p>
+    <form action="" method="post">
+    	{% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
         <input type="submit" value="Submit">
     </form>
 {% endblock %}

@@ -10,9 +10,11 @@
 <img src='\static\images\comic.png'>
 <br />
 -->
-<form action="/email_submit/" method="get">
-    <input type="text" name="name" value='enter email'>
-    <input type="text" name="email" value='enter name'>
-    <input type="submit" value="Notify Me">
+<form action="" method="post">
+	{% csrf_token %}
+	<table>
+		{{ form.as_table }}
+	</table>
+	<input type="submit" value="Submit">
 </form>
 {% endblock %}
