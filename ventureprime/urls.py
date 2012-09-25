@@ -1,29 +1,36 @@
 from django.conf.urls import patterns, include, url
-from ventureprime.views import *
+from ventureprime import views
+from django.views.generic.simple import direct_to_template
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'ventureprime.views.home', name='home'),
-    # url(r'^ventureprime/', include('ventureprime.foo.urls')),
-
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-
-    (r'^$', homepage),
-    (r'^confirm_email/$', confirm_email),
-    (r'^email_submit/$', email_submit),
-
-    (r'^time/$', current_datetime),
-    (r'^meta/$', display_meta),
-    (r'^search/$', search),
-
-    (r'^comic/$', comic),
-    (r'^contact/$', contact),
 )
+
+
+urlpatterns += patterns('ventureprime.views',
+    (r'^$', 'method_splitter', {'GET': views.homepage_get, 
+        'POST': views.homepage_post}),
+    (r'^confirm_email/$', 'confirm_email'),
+
+    (r'^howvpworks/$', direct_to_template, {'template': 'howvpworks/overview.html'}),
+    (r'^howvpworks/(?P<user_type>\w+)/(?P<page>\w+)/$', 'howvpworks_pages'),
+
+    (r'^time/$', 'current_datetime'),
+    (r'^meta/$', 'display_meta'),
+    (r'^search/$', 'search'),
+
+    (r'^comic/$', 'comic'),
+    (r'^contact/$', 'contact'),
+)
+
+#use this body if using a separate views file
+#urlpatterns += patterns('',
+
+#)
