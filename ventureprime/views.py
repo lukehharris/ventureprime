@@ -120,8 +120,8 @@ def contact(request):
             send_mail(
                 cd['subject'],
                 cd['message'],
-                cd.get('email', 'noreply@example.com'),
-                ['siteowner@example.com'],
+                cd.get('email', 'none_provided@ventureprime.co'),
+                ['lukehharris@gmail.com'],
             )
             return HttpResponseRedirect('/contact/thanks/')
     else:

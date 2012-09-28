@@ -28,6 +28,7 @@ urlpatterns += patterns('ventureprime.views',
 
     (r'^comic/$', 'comic'),
     (r'^contact/$', 'contact'),
+    (r'^contact/thanks/$', direct_to_template, {'template': 'footer/thanks.html'}),
 )
 
 #use this body if using a separate views file

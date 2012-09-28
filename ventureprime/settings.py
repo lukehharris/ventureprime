@@ -6,7 +6,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Luke Harris', 'lukehharris@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -158,3 +158,10 @@ LOGGING = {
 
 import dj_database_url
 DATABASES = {'default': dj_database_url.config(default='postgres://postgres:binaans@localhost:5432/vpdb')}
+
+#SendGrid email settings:
+EMAIL_HOST_USER = 'app7706506@heroku.com'
+EMAIL_HOST= 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = 'scnpgeje'
