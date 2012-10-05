@@ -1,15 +1,19 @@
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from ventureprime.books.models import Book
-from ventureprime.forms import ContactForm
+from ventureprime.forms import ContactForm, CreateUser
 from django.shortcuts import render
 from django.core.mail import send_mail
 import datetime
 from django.utils.timezone import utc
 from ventureprime.emailcollection.forms import EmailCollectionForm
 from ventureprime.emailcollection.models import VPUser
-from django.template import TemplateDoesNotExist
+from django.template import RequestContext, TemplateDoesNotExist
 from django.views.generic.simple import direct_to_template
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from emailusernames.utils import create_user
 
 def method_splitter(request, *args, **kwargs):
 #Redirects requests based on request type. *args passes through unknown positional
@@ -61,23 +65,6 @@ def homepage_post(request):
 	else:
 		return render(request, 'homepage/index.html', {'form': form})
 
-'''
-def homepage(request):
-	current_datetime = datetime.datetime.utcnow().replace(tzinfo=utc)
-	if request.method == 'POST':
-		form = EmailCollectionForm(request.POST)
-		if form.is_valid():
-			form_data = form.cleaned_data
-			#do stuff with the data entered here
-			new_user = VPUser(date=current_datetime,email=form_data['email'],
-				user_type=form_data['user_type'])
-			new_user.save()
-			return HttpResponseRedirect('confirm_email')
-	else:
-		form = EmailCollectionForm()
-	return render(request, 'homepage/index.html', {'form': form})
-'''
-
 def confirm_email(request):
 	return render_to_response('homepage/confirm.html')
 
@@ -87,30 +74,6 @@ def howvpworks_pages(request, user_type, page):
         	template="howvpworks/%s/%s.html" % (user_type, page))
     except TemplateDoesNotExist:
         raise Http404()
-
-def current_datetime(request):
-    current_date = datetime.datetime.now()
-    return render_to_response('tests/current_datetime.html', locals())
-
-def display_meta(request):
-    values = request.META.items()
-    values.sort()
-    html = []
-    for k, v in values:
-        html.append('<tr><td>%s</td><td>%s</td></tr>' % (k, v))
-    return HttpResponse('<table>%s</table>' % '\n'.join(html))
-
-def search(request):
-    error = False
-    if 'q' in request.GET:
-        q = request.GET['q']
-        if not q:
-        	error = True
-        else:
-        	books = Book.objects.filter(title__icontains=q)
-        	return render_to_response('tests/search_results.html',
-            	{'books': books, 'query': q})
-    return render_to_response('tests/search_form.html', {'error': error})
 
 def contact(request):
     if request.method == 'POST':
@@ -130,3 +93,48 @@ def contact(request):
 
 def comic(request):
 	return render_to_response('tests/comic.html')
+
+@login_required
+def login_home(request):
+	return render_to_response('accounts/login_home.html', {},
+		context_instance=RequestContext(request))
+
+def create_account(request):
+    if request.method == 'POST':
+        form = CreateUser(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = create_user(
+            	email=cd['email'], 
+            	password=cd['password'])
+            #login_new_user = authenticate(email=user.email, password=user.password)
+            return HttpResponseRedirect('/accounts/create_successful/')
+    else:
+        form = CreateUser()
+    return render(request, 'registration/create_account.html', {'form': form})
+
+#example views:
+def display_meta(request):
+    values = request.META.items()
+    values.sort()
+    html = []
+    for k, v in values:
+        html.append('<tr><td>%s</td><td>%s</td></tr>' % (k, v))
+    return HttpResponse('<table>%s</table>' % '\n'.join(html))
+
+def current_datetime(request):
+    current_date = datetime.datetime.now()
+    return render_to_response('tests/current_datetime.html', locals())
+
+
+def search(request):
+    error = False
+    if 'q' in request.GET:
+        q = request.GET['q']
+        if not q:
+        	error = True
+        else:
+        	books = Book.objects.filter(title__icontains=q)
+        	return render_to_response('tests/search_results.html',
+            	{'books': books, 'query': q})
+    return render_to_response('tests/search_form.html', {'error': error})

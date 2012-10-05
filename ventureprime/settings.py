@@ -1,8 +1,13 @@
 # Django settings for ventureprime project.
 import os
+import socket
 
+#Turn debug off in production, keep in on in dev
+if socket.gethostname() == 'JohnGalt':
+    DEBUG = True
+else:
+    DEBUG = False
 
-DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -97,7 +102,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'ventureprime.urls'
@@ -123,8 +128,11 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+
     'ventureprime.books',
     'ventureprime.emailcollection',
+    #'ventureprime.accounts',
+    'emailusernames',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -165,3 +173,14 @@ EMAIL_HOST= 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_PASSWORD = 'scnpgeje'
+
+SEND_BROKEN_LINK_EMAILS = True
+SERVER_EMAIL = 'ERROR@ventureprime.co'
+
+#AUTH_PROFILE_MODULE = 'ventureprime.accounts.UserProfile'
+
+LOGIN_REDIRECT_URL = '/accounts/home/'
+
+AUTHENTICATION_BACKENDS = (
+    'emailusernames.backends.EmailAuthBackend',
+)

@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from ventureprime import views
 from django.views.generic.simple import direct_to_template
+from emailusernames.forms import EmailAuthenticationForm
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -29,9 +30,19 @@ urlpatterns += patterns('ventureprime.views',
     (r'^comic/$', 'comic'),
     (r'^contact/$', 'contact'),
     (r'^contact/thanks/$', direct_to_template, {'template': 'footer/thanks.html'}),
+
+    (r'^accounts/home/$', 'login_home'),
+    (r'^accounts/signup/$', 'create_account'),
+    (r'^accounts/create_successful/$', direct_to_template, 
+        {'template': 'registration/create_account_success.html'}),
 )
 
 #use this body if using a separate views file
 #urlpatterns += patterns('',
 
 #)
+urlpatterns += patterns('',
+    (r'^accounts/login/$', 'django.contrib.auth.views.login', 
+        {'authentication_form': EmailAuthenticationForm}),
+    (r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
+)
