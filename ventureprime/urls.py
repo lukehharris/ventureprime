@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from ventureprime import views
 from django.views.generic.simple import direct_to_template
 from emailusernames.forms import EmailAuthenticationForm
+import settings
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -49,5 +50,5 @@ urlpatterns += patterns('',
 
 #this uses gunicorn to serve up static files
 urlpatterns += patterns('',  
-    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': ventureprime.settings.STATIC_ROOT}),  
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),  
 ) 
