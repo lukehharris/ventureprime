@@ -46,3 +46,8 @@ urlpatterns += patterns('',
         {'authentication_form': EmailAuthenticationForm}),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
 )
+
+#this uses gunicorn to serve up static files
+urlpatterns += patterns('',  
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),  
+) 
