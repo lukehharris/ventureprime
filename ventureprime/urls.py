@@ -49,5 +49,5 @@ urlpatterns += patterns('',
 
 #this uses gunicorn to serve up static files
 urlpatterns += patterns('',  
-    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),  
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': ventureprime.settings.STATIC_ROOT}),  
 ) 
