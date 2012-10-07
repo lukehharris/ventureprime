@@ -3,7 +3,9 @@
 	<title>{% block title %}{% endblock %}</title>
 	<link rel="shortcut icon" href="\static\favicon.ico">
 	<link rel="stylesheet" href="\static\bootstrap\css\bootstrap.css">
+   {% block custom_style %}
    <link rel="stylesheet" href="\static\styles.css">
+   {% endblock %}
 </head>
 <body>
 <header>

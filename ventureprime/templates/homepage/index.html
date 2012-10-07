@@ -2,14 +2,31 @@
 
 {% block title %}Welcome to VenturePrime!{% endblock %}
 
+{% block custom_style %}
+<!--<link rel="stylesheet" href="\static\comic.css">-->
+{% endblock %}
+
 {% block content %}
 <p>
 <h1>Talk to Your Users.</h1>
 </p>
-<!--
-<img src='\static\images\comic.png'>
+
 <br />
--->
+<br />
+<div id="comic_top">
+	<h2>Your Life Without VenturePrime:</h2>
+	<img src='\static\images\yourlifewithout.png'>
+</div>
+<br />
+<div id="comic_bot">
+	<h2>Your Life With VenturePrime:</h2>
+	<img src='\static\images\yourlifewith.png'>
+</div>
+<br />
+<br />
+<h4>Sign up below to be notified when we launch!</h4>
+
+<div id="signup_form">
 <form action="" method="POST">
 	{% csrf_token %}
 	<table>
@@ -17,6 +34,7 @@
 	</table>
 	<input type="submit" value="Submit">
 </form>
+</div>
 
 <!--  Facebook likes -->
 <p>
@@ -32,4 +50,7 @@
 	</script>
 	<div class="fb-like" data-href="http://www.facebook.com/VenturePrime" data-send="false" data-width="450" data-show-faces="true"></div>
 </p>
+<br />
+<br />
+<br />
 {% endblock %}

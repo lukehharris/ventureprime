@@ -129,8 +129,6 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
 
-    'ventureprime.books',
-    'ventureprime.emailcollection',
     #'ventureprime.accounts',
     'emailusernames',
 )
