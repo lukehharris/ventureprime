@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from ventureprime.books.models import Book
 from ventureprime.forms import ContactForm, CreateUser
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 import datetime
 from django.utils.timezone import utc
@@ -15,6 +15,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from emailusernames.utils import create_user
 import OpenTokSDK
+from ventureprime.videochat.models import SessionId
+from settings import OPENTOK_API_SECRET, OPENTOK_API_KEY
 
 def method_splitter(request, *args, **kwargs):
 #Redirects requests based on request type. *args passes through unknown positional
@@ -102,17 +104,44 @@ def login_home(request):
 
 @login_required
 def start_video_session(request):
-    OPENTOK_API_KEY = '21024092'
-    OPENTOK_API_SECRET = '32081ce29ba11c87a2cafa5c2050a19aa5eda40c'
     opentok_sdk = OpenTokSDK.OpenTokSDK(OPENTOK_API_KEY,OPENTOK_API_SECRET)
     #try to establish P2P connection. If it fails, will use TokBox's servers
-    session_properties = {OpenTokSDK.SessionProperties.p2p_preference: "enabled"}
+    session_properties = {OpenTokSDK.SessionProperties.p2p_preference: "disabled"}
     session = opentok_sdk.create_session(None, session_properties)
     token = opentok_sdk.generate_token(session.session_id)
 
+    url = session.session_id + '543'
+
+    save_session = SessionId(
+        sessionId = session.session_id,
+        sessionUrlEnding = url,
+        )
+    save_session.save()
+
+    request.session['token'] = token
+
+    return redirect('/video_session/' + url)
+    #return render_to_response('accounts/video_session.html', 
+    #    {'api_key': OPENTOK_API_KEY,
+    #    'session': session, 
+    #    'token': token},
+    #    context_instance=RequestContext(request))
+
+@login_required
+def video_session(request, session_url):
+    s = SessionId.objects.get(sessionUrlEnding = session_url)
+    session_id = s.sessionId
+
+    #if user doesn't have a token (ie if they weren't the session creator), give them one
+    if 'token' not in request.session:
+        opentok_sdk = OpenTokSDK.OpenTokSDK(OPENTOK_API_KEY,OPENTOK_API_SECRET)
+        request.session['token'] = opentok_sdk.generate_token(session_id)
+    
+    token = request.session['token']
+
     return render_to_response('accounts/video_session.html', 
         {'api_key': OPENTOK_API_KEY,
-        'session': session, 
+        'session': session_id, 
         'token': token},
         context_instance=RequestContext(request))
 

@@ -6,7 +6,7 @@
 <script src="http://static.opentok.com/v0.91/js/TB.min.js"></script>
 <script type="text/javascript">
 	var apiKey = '{{ api_key }}';
-	var sessionId = '{{ session.session_id }}';
+	var sessionId = '{{ session }}';
 	var token = '{{ token }}';
 
 	TB.setLogLevel(TB.DEBUG); // Set this for helpful debugging messages in console
@@ -21,6 +21,27 @@
 		var publishProps = {height:240, width:320};
 		publisher = TB.initPublisher(apiKey, 'video_stream', publishProps);
 		session.publish(publisher);
+		subscribeToStreams(event.streams);
+	}
+	function streamCreatedHandler(event) {
+		subscribeToStreams(event.streams);
+	}
+	function subscribeToStreams(streams) {
+		for (var i = 0; i < streams.length; i++) {
+			// Make sure we don't subscribe to ourself
+			if (streams[i].connection.connectionId == session.connection.connectionId) {
+				return;
+			}
+
+			// Create the div to put the subscriber element in to
+			var div = document.createElement('div');
+			div.setAttribute('id', 'stream' + streams[i].streamId);
+			document.body.appendChild(div);
+
+			// Subscribe to the stream
+			var subscribeProps = {height:240, width:320};
+			session.subscribe(streams[i], div.id);
+		}
 	}
 </script>
 {% endblock %}
@@ -31,7 +52,7 @@
 </p>
 <p>You're logged in as: {{ user.email }}</p>
 <p>Your api key is: {{ api_key }}</p>
-<p>Your session id is: {{ session.session_id }}</p>
+<p>Your session id is: {{ session }}</p>
 <p>Your token is: {{ token }}</p>
 
 <div id='video_stream'>

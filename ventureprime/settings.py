@@ -132,6 +132,7 @@ INSTALLED_APPS = (
     #'ventureprime.accounts',
     'emailusernames',
     'ventureprime.emailcollection',
+    'ventureprime.videochat',
 )
 
 #only run this in production:
@@ -188,3 +189,6 @@ LOGIN_REDIRECT_URL = '/accounts/home/'
 AUTHENTICATION_BACKENDS = (
     'emailusernames.backends.EmailAuthBackend',
 )
+
+OPENTOK_API_KEY = '21024092'
+OPENTOK_API_SECRET = '32081ce29ba11c87a2cafa5c2050a19aa5eda40c'

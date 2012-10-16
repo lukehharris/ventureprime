@@ -34,6 +34,7 @@ urlpatterns += patterns('ventureprime.views',
     (r'^accounts/create_successful/$', direct_to_template, 
         {'template': 'registration/create_account_success.html'}),
     (r'^accounts/video_session/$', 'start_video_session'),
+    (r'^video_session/(?P<session_url>.+)/$', 'video_session'),
 )
 
 #use this body if using a separate views file
