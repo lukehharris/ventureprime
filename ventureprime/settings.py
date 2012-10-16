@@ -131,6 +131,7 @@ INSTALLED_APPS = (
 
     #'ventureprime.accounts',
     'emailusernames',
+    'ventureprime.emailcollection',
 )
 
 #only run this in production:

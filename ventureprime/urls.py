@@ -24,11 +24,8 @@ urlpatterns += patterns('ventureprime.views',
     (r'^howvpworks/$', direct_to_template, {'template': 'howvpworks/overview.html'}),
     (r'^howvpworks/(?P<user_type>\w+)/(?P<page>\w+)/$', 'howvpworks_pages'),
 
-    (r'^time/$', 'current_datetime'),
-    (r'^meta/$', 'display_meta'),
-    (r'^search/$', 'search'),
-
     (r'^comic/$', 'comic'),
+    
     (r'^contact/$', 'contact'),
     (r'^contact/thanks/$', direct_to_template, {'template': 'footer/thanks.html'}),
 
@@ -36,6 +33,7 @@ urlpatterns += patterns('ventureprime.views',
     (r'^accounts/signup/$', 'create_account'),
     (r'^accounts/create_successful/$', direct_to_template, 
         {'template': 'registration/create_account_success.html'}),
+    (r'^accounts/video_session/$', 'start_video_session'),
 )
 
 #use this body if using a separate views file

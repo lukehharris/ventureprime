@@ -1,0 +1,45 @@
+{% extends "base/base.html" %}
+
+{% block title %}Create Chat Session | VenturePrime{% endblock %}
+
+{% block header_includes %}
+<script src="http://static.opentok.com/v0.91/js/TB.min.js"></script>
+<script type="text/javascript">
+	var apiKey = '{{ api_key }}';
+	var sessionId = '{{ session.session_id }}';
+	var token = '{{ token }}';
+
+	TB.setLogLevel(TB.DEBUG); // Set this for helpful debugging messages in console
+
+	var session = TB.initSession(sessionId);
+	session.addEventListener('sessionConnected', sessionConnectedHandler);
+	session.connect(apiKey, token);
+
+	var publisher;
+
+	function sessionConnectedHandler(event) {
+		var publishProps = {height:240, width:320};
+		publisher = TB.initPublisher(apiKey, 'video_stream', publishProps);
+		session.publish(publisher);
+	}
+</script>
+{% endblock %}
+
+{% block content %}
+<p>
+	<h1>Create Chat Session</h1>
+</p>
+<p>You're logged in as: {{ user.email }}</p>
+<p>Your api key is: {{ api_key }}</p>
+<p>Your session id is: {{ session.session_id }}</p>
+<p>Your token is: {{ token }}</p>
+
+<div id='video_stream'>
+
+</div>
+
+
+
+
+
+{% endblock %}

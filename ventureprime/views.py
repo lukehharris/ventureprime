@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from emailusernames.utils import create_user
+import OpenTokSDK
 
 def method_splitter(request, *args, **kwargs):
 #Redirects requests based on request type. *args passes through unknown positional
@@ -96,8 +97,24 @@ def comic(request):
 
 @login_required
 def login_home(request):
-	return render_to_response('accounts/login_home.html', {},
+    return render_to_response('accounts/login_home.html', {},
 		context_instance=RequestContext(request))
+
+@login_required
+def start_video_session(request):
+    OPENTOK_API_KEY = '21024092'
+    OPENTOK_API_SECRET = '32081ce29ba11c87a2cafa5c2050a19aa5eda40c'
+    opentok_sdk = OpenTokSDK.OpenTokSDK(OPENTOK_API_KEY,OPENTOK_API_SECRET)
+    #try to establish P2P connection. If it fails, will use TokBox's servers
+    session_properties = {OpenTokSDK.SessionProperties.p2p_preference: "enabled"}
+    session = opentok_sdk.create_session(None, session_properties)
+    token = opentok_sdk.generate_token(session.session_id)
+
+    return render_to_response('accounts/video_session.html', 
+        {'api_key': OPENTOK_API_KEY,
+        'session': session, 
+        'token': token},
+        context_instance=RequestContext(request))
 
 def create_account(request):
     if request.method == 'POST':
@@ -112,29 +129,3 @@ def create_account(request):
     else:
         form = CreateUser()
     return render(request, 'registration/create_account.html', {'form': form})
-
-#example views:
-def display_meta(request):
-    values = request.META.items()
-    values.sort()
-    html = []
-    for k, v in values:
-        html.append('<tr><td>%s</td><td>%s</td></tr>' % (k, v))
-    return HttpResponse('<table>%s</table>' % '\n'.join(html))
-
-def current_datetime(request):
-    current_date = datetime.datetime.now()
-    return render_to_response('tests/current_datetime.html', locals())
-
-
-def search(request):
-    error = False
-    if 'q' in request.GET:
-        q = request.GET['q']
-        if not q:
-        	error = True
-        else:
-        	books = Book.objects.filter(title__icontains=q)
-        	return render_to_response('tests/search_results.html',
-            	{'books': books, 'query': q})
-    return render_to_response('tests/search_form.html', {'error': error})
